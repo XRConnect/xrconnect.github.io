@@ -1,0 +1,127 @@
+<form id="projectForm">
+  <h3>프로젝트 제목</h3>
+  <input type="text" name="title" required placeholder="예) XR 캠페인">
+
+  <h3>목적</h3>
+  <div class="options" data-group="purpose">
+    <div class="option-btn" role="button" tabindex="0">브랜드 홍보</div>
+    <div class="option-btn" role="button" tabindex="0">제품 홍보</div>
+    <div class="option-btn" role="button" tabindex="0">이벤트/행사</div>
+    <div class="option-btn" role="button" tabindex="0">기타</div>
+  </div>
+
+  <h3>산업</h3>
+  <div class="options" data-group="industry">
+    <div class="option-btn" role="button" tabindex="0">리테일</div>
+    <div class="option-btn" role="button" tabindex="0">문화/예술</div>
+    <div class="option-btn" role="button" tabindex="0">IT/통신</div>
+    <div class="option-btn" role="button" tabindex="0">기타</div>
+  </div>
+
+  <h3>일정 & 예산</h3>
+  <input type="date" name="start_date">
+  <input type="date" name="end_date">
+  <select name="budget">
+    <option>500만 원 이하</option>
+    <option>500만 ~ 1000만 원</option>
+    <option>1000만 원 이상</option>
+  </select>
+  <select name="nda">
+    <option>필요</option>
+    <option>불필요</option>
+  </select>
+
+  <h3>담당자 정보</h3>
+  <input type="text" name="name" placeholder="이름" required>
+  <input type="email" name="email" placeholder="이메일" required>
+  <input type="tel" name="phone" placeholder="연락처">
+  <input type="text" name="company" placeholder="회사명">
+
+  <button type="submit">등록하기 →</button>
+</form>
+
+<style>
+  form { font-family: sans-serif; max-width: 500px; margin: 0 auto; }
+  h3 { margin-top: 20px; font-size: 16px; }
+  input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; }
+  .options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .option-btn { padding: 6px 12px; border: 1px solid #aaa; border-radius: 6px; cursor: pointer; user-select: none; }
+  .option-btn.active { background: #000; color: #fff; }
+  button { margin-top: 20px; width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  console.log("[INIT] 스크립트 실행됨"); // ✅ 여기가 먼저 찍히는지 확인
+  document.querySelectorAll('.options').forEach(container => {
+    container.addEventListener('click', (ev) => {
+      const btn = ev.target.closest('.option-btn');
+      if (!btn || !container.contains(btn)) return;
+      btn.classList.toggle('active');
+      console.log('[TOGGLE]', container.dataset.group, btn.textContent.trim(), btn.classList.contains('active'));
+    });
+
+    // 접근성: 키보드(Enter/Space)로도 토글
+    container.addEventListener('keydown', (ev) => {
+      const btn = ev.target.closest('.option-btn');
+      if (!btn || !container.contains(btn)) return;
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        btn.classList.toggle('active');
+        console.log('[TOGGLE-KEY]', container.dataset.group, btn.textContent.trim(), btn.classList.contains('active'));
+      }
+    });
+  });
+
+  // 2) submit 처리
+  const form = document.getElementById('projectForm');
+  form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  console.log("[SUBMIT] 이벤트 발생"); // ✅ 여기가 뜨는지 확인
+
+    // 기본 필드 수집
+    const formData = new FormData(form);
+    const data = {};
+    formData.forEach((v,k) => data[k] = v);
+
+    // options 그룹들 수집 (data-group 사용)
+    document.querySelectorAll('.options[data-group]').forEach(container => {
+      const key = container.dataset.group;
+      const vals = [...container.querySelectorAll('.option-btn.active')].map(x => x.textContent.trim());
+      data[key] = vals.join(', ');
+    });
+
+    console.log('[SEND DATA]', data);
+
+    // 3) GAS URL 넣어 (자기꺼로 교체)
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwfc5VqKjuPwNAobcqptPKys1TmN7vDk_t5OFs4LZceiqx3oaU47z1SejSVJXkoCf_saw/exec';
+
+    try {
+      const resp = await fetch(GAS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const text = await resp.text();
+      console.log('[RAW RESPONSE]', text);
+
+      let json;
+      try { json = JSON.parse(text); } catch(err) {
+        throw new Error('서버 응답이 JSON이 아닙니다: ' + text);
+      }
+
+      if (json.result === 'success') {
+        alert('✅ 등록 완료! 구글 시트 & Slack에 전송되었습니다.');
+        form.reset();
+        document.querySelectorAll('.option-btn.active').forEach(el => el.classList.remove('active'));
+      } else {
+        alert('⚠️ 등록 실패: ' + (json.message || JSON.stringify(json)));
+      }
+    } catch (err) {
+      console.error('[SEND ERROR]', err);
+      alert('서버 오류 발생: ' + err.message);
+    }
+  });
+});
+</script>
