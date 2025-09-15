@@ -98,10 +98,9 @@
 
     try {
       const resp = await fetch(GAS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+  method: 'POST',
+  body: new URLSearchParams(data) // JSON 대신 form-data로 보냄
+});
 
       const text = await resp.text();
       console.log('[RAW RESPONSE]', text);
