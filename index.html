@@ -120,14 +120,16 @@
 
       console.log('[SEND DATA]', data);
 
-      const GAS_URL = 'https://script.google.com/macros/s/AKfycbxMEv3uuBuV0J12GiMe0ie03yxyTrWRjwdAKfs_7TX7ihys7AJcNkN6Mt8P7UvRz2gJFA/exec';
+      const GAS_URL = 'https://script.google.com/macros/s/AKfycbynHYGCr8RT0miphi2iUP8e1u6Uhz1jRDRwjcaq_neIWrNjfXtWfsGslJ7Z1h7N11Y8fg/exec';
 
       try {
         const resp = await fetch(GAS_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
+  method: 'POST',
+  mode: 'cors',   // ✅ 추가
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(data),
+});
+
 
         if (!resp.ok) {
           throw new Error(`서버 오류: ${resp.status} ${resp.statusText}`);
