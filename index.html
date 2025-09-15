@@ -4,163 +4,110 @@
 
   <h3>목적</h3>
   <div class="options" data-group="purpose">
-    <div class="option-btn" role="checkbox" tabindex="0" aria-checked="false">브랜드 홍보</div>
-    <div class="option-btn" role="checkbox" tabindex="0" aria-checked="false">제품 홍보</div>
-    <div class="option-btn" role="checkbox" tabindex="0" aria-checked="false">이벤트/행사</div>
-    <div class="option-btn" role="checkbox" tabindex="0" aria-checked="false">기타</div>
+    <div class="option-btn">브랜드 홍보</div>
+    <div class="option-btn">제품 홍보</div>
+    <div class="option-btn">이벤트/행사</div>
+    <div class="option-btn">기타</div>
   </div>
 
   <h3>산업</h3>
   <div class="options" data-group="industry">
-    <div class="option-btn" role="checkbox" tabindex="0" aria-checked="false">리테일</div>
-    <div class="option-btn" role="checkbox" tabindex="0" aria-checked="false">문화/예술</div>
-    <div class="option-btn" role="checkbox" tabindex="0" aria-checked="false">IT/통신</div>
-    <div class="option-btn" role="checkbox" tabindex="0" aria-checked="false">기타</div>
+    <div class="option-btn">리테일</div>
+    <div class="option-btn">문화/예술</div>
+    <div class="option-btn">IT/통신</div>
+    <div class="option-btn">기타</div>
   </div>
 
-  <h3>콘텐츠</h3>
-  <input type="text" name="content" placeholder="콘텐츠 설명 (선택)">
-
-  <h3>디바이스</h3>
-  <input type="text" name="device" placeholder="사용 디바이스 (선택)">
-
-  <h3>참고자료</h3>
-  <input type="text" name="reference" placeholder="참고 URL 또는 자료 (선택)">
-
   <h3>일정 & 예산</h3>
-  <input type="date" name="start_date" required>
-  <input type="date" name="end_date" required>
-  <select name="budget" required>
-    <option value="" disabled selected>예산 선택</option>
-    <option value="500만 원 이하">500만 원 이하</option>
-    <option value="500만 ~ 1000만 원">500만 ~ 1000만 원</option>
-    <option value="1000만 원 이상">1000만 원 이상</option>
+  <input type="date" name="start_date">
+  <input type="date" name="end_date">
+  <select name="budget">
+    <option>500만 원 이하</option>
+    <option>500만 ~ 1000만 원</option>
+    <option>1000만 원 이상</option>
   </select>
-  <select name="nda" required>
-    <option value="" disabled selected>NDA 여부 선택</option>
-    <option value="필요">필요</option>
-    <option value="불필요">불필요</option>
+  <select name="nda">
+    <option>필요</option>
+    <option>불필요</option>
   </select>
 
   <h3>담당자 정보</h3>
   <input type="text" name="name" placeholder="이름" required>
   <input type="email" name="email" placeholder="이메일" required>
-  <input type="tel" name="phone" placeholder="연락처 (예: 01012345678)" pattern="[0-9]{10,11}" title="10~11자리 숫자만 입력">
-  <input type="text" name="company" placeholder="회사명 (선택)">
+  <input type="tel" name="phone" placeholder="연락처">
+  <input type="text" name="company" placeholder="회사명">
 
-  <button type="submit" id="submitBtn">등록하기 →</button>
-  <div id="loading" style="display: none; text-align: center; margin-top: 10px;">처리 중...</div>
+  <button type="submit">등록하기 →</button>
 </form>
 
 <style>
   form { font-family: sans-serif; max-width: 500px; margin: 0 auto; }
   h3 { margin-top: 20px; font-size: 16px; }
-  input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+  input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; }
   .options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
   .option-btn { padding: 6px 12px; border: 1px solid #aaa; border-radius: 6px; cursor: pointer; user-select: none; }
   .option-btn.active { background: #000; color: #fff; }
-  .option-btn:focus { outline: 2px solid #007bff; }
-  button { margin-top: 20px; width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
-  button:disabled { background: #666; cursor: not-allowed; }
+  button { margin-top: 20px; width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    console.log("[INIT] 스크립트 실행됨");
-
+    // 선택 버튼 토글
     document.querySelectorAll('.options').forEach(container => {
       container.addEventListener('click', (ev) => {
         const btn = ev.target.closest('.option-btn');
-        if (!btn || !container.contains(btn)) return;
+        if (!btn) return;
         btn.classList.toggle('active');
-        btn.setAttribute('aria-checked', btn.classList.contains('active'));
-        console.log('[TOGGLE]', container.dataset.group, btn.textContent.trim(), btn.classList.contains('active'));
-      });
-
-      container.addEventListener('keydown', (ev) => {
-        const btn = ev.target.closest('.option-btn');
-        if (!btn || !container.contains(btn)) return;
-        if (ev.key === 'Enter' || ev.key === ' ') {
-          ev.preventDefault();
-          btn.classList.toggle('active');
-          btn.setAttribute('aria-checked', btn.classList.contains('active'));
-          console.log('[TOGGLE-KEY]', container.dataset.group, btn.textContent.trim(), btn.classList.contains('active'));
-        }
       });
     });
 
+    // 제출 처리
     const form = document.getElementById('projectForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const loadingDiv = document.getElementById('loading');
-
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      console.log("[SUBMIT] 이벤트 발생");
 
-      submitBtn.disabled = true;
-      loadingDiv.style.display = 'block';
-
+      // 1) 기본 입력값 수집
       const formData = new FormData(form);
       const data = {};
       formData.forEach((v, k) => data[k] = v);
 
+      // 2) 선택 버튼 값 수집
       document.querySelectorAll('.options[data-group]').forEach(container => {
         const key = container.dataset.group;
         const vals = [...container.querySelectorAll('.option-btn.active')].map(x => x.textContent.trim());
-        if (vals.length === 0) {
-          alert(`⚠️ ${key} 항목을 최소 하나 선택해주세요.`);
-          submitBtn.disabled = false;
-          loadingDiv.style.display = 'none';
-          return;
-        }
         data[key] = vals.join(', ');
       });
 
-      if (!data.purpose || !data.industry) return;
-
       console.log('[SEND DATA]', data);
 
-      const GAS_URL = 'https://script.google.com/macros/s/AKfycbyyWKmkwDzmXr6ELG5KH-yfY72u-Dj8bzKYknjXgz_akie7eUK6-5QVgmycqYZchznRIg/exec';
+      // 3) GAS URL (배포한 웹 앱 주소)
+      const GAS_URL = "https://script.google.com/macros/s/AKfycbzZiOg0k-wvvBixOOsH1nlX6GH91N1BZxb9JmgzgO-wBdbJoM0DLVXM1bA6HLErWvEI3Q/exec";
 
       try {
         const resp = await fetch(GAS_URL, {
-  method: "POST",
-  mode: "no-cors",   // 🚨 추가
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(data),
-});
-
-
-        if (!resp.ok) {
-          throw new Error(`서버 오류: ${resp.status} ${resp.statusText}`);
-        }
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
 
         const text = await resp.text();
         console.log('[RAW RESPONSE]', text);
 
         let json;
-        try {
-          json = JSON.parse(text);
-        } catch (err) {
-          throw new Error('서버 응답이 JSON이 아닙니다: ' + text);
+        try { json = JSON.parse(text); } catch(err) {
+          throw new Error('서버 응답이 JSON이 아님: ' + text);
         }
 
         if (json.result === 'success') {
-          alert('✅ 등록 완료! 구글 시트 & Slack에 전송되었습니다.');
+          alert('✅ 등록 완료! 구글 시트 & Slack에 전송됨');
           form.reset();
-          document.querySelectorAll('.option-btn').forEach(el => {
-            el.classList.remove('active');
-            el.setAttribute('aria-checked', 'false');
-          });
+          document.querySelectorAll('.option-btn.active').forEach(el => el.classList.remove('active'));
         } else {
           alert('⚠️ 등록 실패: ' + (json.message || JSON.stringify(json)));
         }
       } catch (err) {
         console.error('[SEND ERROR]', err);
-        alert('서버 오류 발생: ' + err.message);
-      } finally {
-        submitBtn.disabled = false;
-        loadingDiv.style.display = 'none';
+        alert('서버 오류: ' + err.message);
       }
     });
   });
