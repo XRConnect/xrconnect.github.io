@@ -94,12 +94,13 @@
     console.log('[SEND DATA]', data);
 
     // 3) GAS URL 넣어 (자기꺼로 교체)
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwfc5VqKjuPwNAobcqptPKys1TmN7vDk_t5OFs4LZceiqx3oaU47z1SejSVJXkoCf_saw/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbz5pY08dW6zfYmp6QaB27O6j3Qgjc6zF5aB9eKlMRo7rxRQfby3L2mqvNgawPOt1stkfA/exec';
 
     try {
       const resp = await fetch(GAS_URL, {
   method: 'POST',
-  body: new URLSearchParams(data) // JSON 대신 form-data로 보냄
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(data),
 });
 
       const text = await resp.text();
