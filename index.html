@@ -18,7 +18,6 @@
     <div class="option-btn" role="checkbox" tabindex="0" aria-checked="false">기타</div>
   </div>
 
-  <!-- 추가된 필드: content, device, reference -->
   <h3>콘텐츠</h3>
   <input type="text" name="content" placeholder="콘텐츠 설명 (선택)">
 
@@ -69,7 +68,6 @@
   document.addEventListener('DOMContentLoaded', () => {
     console.log("[INIT] 스크립트 실행됨");
 
-    // 옵션 버튼 이벤트
     document.querySelectorAll('.options').forEach(container => {
       container.addEventListener('click', (ev) => {
         const btn = ev.target.closest('.option-btn');
@@ -91,7 +89,6 @@
       });
     });
 
-    // 폼 제출 처리
     const form = document.getElementById('projectForm');
     const submitBtn = document.getElementById('submitBtn');
     const loadingDiv = document.getElementById('loading');
@@ -100,16 +97,13 @@
       e.preventDefault();
       console.log("[SUBMIT] 이벤트 발생");
 
-      // 버튼 비활성화 및 로딩 표시
       submitBtn.disabled = true;
       loadingDiv.style.display = 'block';
 
-      // 데이터 수집
       const formData = new FormData(form);
       const data = {};
       formData.forEach((v, k) => data[k] = v);
 
-      // 옵션 그룹 수집
       document.querySelectorAll('.options[data-group]').forEach(container => {
         const key = container.dataset.group;
         const vals = [...container.querySelectorAll('.option-btn.active')].map(x => x.textContent.trim());
@@ -122,13 +116,11 @@
         data[key] = vals.join(', ');
       });
 
-      // 중단된 경우 리턴
       if (!data.purpose || !data.industry) return;
 
       console.log('[SEND DATA]', data);
 
-      // GAS URL
-      const GAS_URL = 'https://script.google.com/macros/s/AKfycbwo-H0h27wwrHCZj26XtsypuxBma63pvw-FnBC1JK6ctY2bILRGXHP-XaD96HB_8pGv2A/exec';
+      const GAS_URL = 'https://script.google.com/macros/s/AKfycbyvaL365Z6JYlfycNWWzrCqshDdgpb8QwdMmb9AKbT3ToOPnwnVBwpAY1Qh5lqIFSwdsQ/exec';
 
       try {
         const resp = await fetch(GAS_URL, {
