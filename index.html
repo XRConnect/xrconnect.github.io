@@ -120,13 +120,13 @@
 
       console.log('[SEND DATA]', data);
 
-      const GAS_URL = 'https://script.google.com/macros/s/AKfycbyqdTWnjDCqC63Z8lcR4cPBla-TxCxpVqPb4y0D4seMWv3ED448WbF5q1OPz2HeMH6b3w/exec';
+      const GAS_URL = 'https://script.google.com/macros/s/AKfycbyyWKmkwDzmXr6ELG5KH-yfY72u-Dj8bzKYknjXgz_akie7eUK6-5QVgmycqYZchznRIg/exec';
 
       try {
         const resp = await fetch(GAS_URL, {
-  method: 'POST',
-  mode: 'cors',   // ✅ 추가
-  headers: { 'Content-Type': 'application/json' },
+  method: "POST",
+  mode: "no-cors",   // 🚨 추가
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify(data),
 });
 
