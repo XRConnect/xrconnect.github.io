@@ -2,78 +2,113 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>문의하기 - 프로젝트 제목</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>프로젝트 제목 입력</title>
   <style>
     :root{
-      --text:#111;
-      --muted:#6b7280;  /* 회색 라벨 */
-      --border:#d1d5db;
-      --focus:#111;
-      --bg:#fff;
+      --text:#111; --muted:#6b7280; --border:#d1d5db; --bg:#fff; --dark:#1f1f1f;
     }
     *{box-sizing:border-box}
     body{
-      margin:0; padding:40px 24px; background:var(--bg);
+      margin:0; background:var(--bg); color:var(--text);
       font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-      color:var(--text);
     }
+    .container{ max-width:1200px; margin:0 auto; padding:40px 24px 120px; }
+
     .wrap{
-      max-width:1100px; margin:0 auto;
-      display:grid; grid-template-columns: 320px 1fr; gap:48px;
-      align-items:center;
+      display:grid; grid-template-columns: 320px 1fr; gap:48px; align-items:center;
     }
-    /* 왼쪽: 번호 + 안내문 */
-    .left{
-      display:flex; align-items:center; gap:16px;
-    }
-    .step{
-      width:36px; height:36px; border-radius:50%;
-      background:#111; color:#fff; display:grid; place-items:center;
-      font-weight:700;
-    }
-    .left h2{
-      margin:0; font-size:22px; font-weight:800; letter-spacing:-0.02em;
-    }
-    /* 오른쪽: 라벨 + 입력 */
-    .field label{
-      display:block; margin-bottom:8px; font-weight:700; font-size:14px; color:var(--text);
-    }
-    .hint{ color:#9ca3af; font-size:14px; margin-bottom:10px; display:none; }
+    .left{ display:flex; align-items:center; gap:16px; width: 480px; }
+    .step{ width:36px; height:36px; border-radius:50%; background:#111; color:#fff; display:grid; place-items:center; font-weight:700; }
+    .left h2{ margin:0; font-size:22px; font-weight:800; letter-spacing:-0.02em; }
+
+    .field label{ display:block; margin-bottom:8px; font-weight:700; font-size:14px; }
     .input{
       width:100%; height:48px; padding:0 14px; font-size:16px;
       border:1px solid var(--border); border-radius:12px; outline:none;
       transition:border-color .15s, box-shadow .15s;
     }
     .input::placeholder{ color:#c0c4cc; }
-    .input:focus{
-      border-color:var(--focus);
-      box-shadow:0 0 0 4px rgba(0,0,0,.06);
-    }
+    .input:focus{ border-color:#111; box-shadow:0 0 0 4px rgba(0,0,0,.06); }
 
-    /* 반응형: 모바일에서 스택 */
+    /* 하단 고정 CTA */
+    .cta-bar{
+      position:fixed; left:0; right:0; bottom:0; background:var(--dark);
+      padding:12px 16px; z-index:50;
+    }
+    .cta{
+      width:100%; height:48px; border-radius:10px; border:1px solid rgba(255,255,255,.6);
+      background:transparent; color:#fff; font-size:16px; font-weight:700;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      cursor:pointer;
+    }
+    .cta .icon{
+      width:26px; height:26px; border:1px solid #fff; border-radius:9999px;
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:14px; line-height:1;
+    }
+    .cta:disabled{ opacity:.6; cursor:not-allowed; }
+
     @media (max-width: 800px){
       .wrap{ grid-template-columns: 1fr; gap:20px; }
-      .left{ align-items:flex-start; }
     }
   </style>
 </head>
 <body>
-  <section class="wrap">
-    <!-- 왼쪽: 1번 -->
-    <div class="left" aria-hidden="true">
-      <div class="step">1</div>
-      <h2>프로젝트 제목을 입력하세요</h2>
-    </div>
+  <div class="container">
+    <form id="titleForm">
+      <section class="wrap" aria-label="프로젝트 제목 입력">
+        <div class="left" aria-hidden="true">
+          <div class="step">1</div>
+          <h2>프로젝트 제목을 입력하세요</h2>
+        </div>
 
-    <!-- 오른쪽: 라벨 + 인풋 -->
-    <div class="right">
-      <div class="field">
-        <label for="title">프로젝트 제목</label>
-        <input id="title" name="title" class="input" required
-               placeholder="예) 뉴미디어 XR 캠페인" autocomplete="off" />
-      </div>
-    </div>
-  </section>
+        <div class="right">
+          <div class="field">
+            <label for="title">프로젝트 제목</label>
+            <input id="title" name="title" class="input" required
+                   placeholder="예) 뉴미디어 XR 캠페인" autocomplete="off" />
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+
+  <!-- 하단 100% 등록하기 버튼 -->
+  <div class="cta-bar">
+    <button id="submitBtn" class="cta" form="titleForm" type="submit">
+      등록하기 <span class="icon">→</span>
+    </button>
+  </div>
+
+  <script>
+    // 👉 여기를 Apps Script 웹 앱 URL로 교체하세요.
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyVk4mmBXzjhXEhqL6Z2lLTTQpM823aLbzBhGIWIfxqU2SITYdcHOENY631bcWZs4515g/exec';
+
+    const form = document.getElementById('titleForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+
+      submitBtn.disabled = true;
+
+      try {
+        const params = new URLSearchParams(new FormData(form)); // form-urlencoded (preflight 없음)
+        const res = await fetch(SCRIPT_URL, { method: 'POST', body: params });
+        // CORS 정책상 응답 본문은 못 읽을 수 있어요. 성공/실패는 일단 네트워크 기준으로 처리.
+        if (!res.ok) throw new Error('Network error');
+
+        alert('등록되었습니다. 감사합니다!');
+        form.reset();
+      } catch (err) {
+        console.error(err);
+        alert('전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
