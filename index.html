@@ -1,3 +1,55 @@
+<form id="projectForm">
+  <h3>프로젝트 제목</h3>
+  <input type="text" name="title" required placeholder="예) XR 캠페인">
+
+  <h3>목적</h3>
+  <div class="options" data-group="purpose">
+    <div class="option-btn">브랜드 홍보</div>
+    <div class="option-btn">제품 홍보</div>
+    <div class="option-btn">이벤트/행사</div>
+    <div class="option-btn">기타</div>
+  </div>
+
+  <h3>산업</h3>
+  <div class="options" data-group="industry">
+    <div class="option-btn">리테일</div>
+    <div class="option-btn">문화/예술</div>
+    <div class="option-btn">IT/통신</div>
+    <div class="option-btn">기타</div>
+  </div>
+
+  <h3>일정 & 예산</h3>
+  <input type="date" name="start_date">
+  <input type="date" name="end_date">
+  <select name="budget">
+    <option>500만 원 이하</option>
+    <option>500만 ~ 1000만 원</option>
+    <option>1000만 원 이상</option>
+  </select>
+  <select name="nda">
+    <option>필요</option>
+    <option>불필요</option>
+  </select>
+
+  <h3>담당자 정보</h3>
+  <input type="text" name="name" placeholder="이름" required>
+  <input type="email" name="email" placeholder="이메일" required>
+  <input type="tel" name="phone" placeholder="연락처">
+  <input type="text" name="company" placeholder="회사명">
+
+  <button type="submit">등록하기 →</button>
+</form>
+
+<style>
+  form { font-family: sans-serif; max-width: 500px; margin: 0 auto; }
+  h3 { margin-top: 20px; font-size: 16px; }
+  input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; }
+  .options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .option-btn { padding: 6px 12px; border: 1px solid #aaa; border-radius: 6px; cursor: pointer; user-select: none; }
+  .option-btn.active { background: #000; color: #fff; }
+  button { margin-top: 20px; width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; }
+</style>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     // 선택 버튼 토글
