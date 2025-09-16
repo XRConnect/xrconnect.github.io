@@ -1,115 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>프로젝트 등록</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>문의하기 - 프로젝트 제목</title>
+  <style>
+    :root{
+      --text:#111;
+      --muted:#6b7280;  /* 회색 라벨 */
+      --border:#d1d5db;
+      --focus:#111;
+      --bg:#fff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; padding:40px 24px; background:var(--bg);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      color:var(--text);
+    }
+    .wrap{
+      max-width:1100px; margin:0 auto;
+      display:grid; grid-template-columns: 320px 1fr; gap:48px;
+      align-items:center;
+    }
+    /* 왼쪽: 번호 + 안내문 */
+    .left{
+      display:flex; align-items:center; gap:16px;
+    }
+    .step{
+      width:36px; height:36px; border-radius:50%;
+      background:#111; color:#fff; display:grid; place-items:center;
+      font-weight:700;
+    }
+    .left h2{
+      margin:0; font-size:22px; font-weight:800; letter-spacing:-0.02em;
+    }
+    /* 오른쪽: 라벨 + 입력 */
+    .field label{
+      display:block; margin-bottom:8px; font-weight:700; font-size:14px; color:var(--text);
+    }
+    .hint{ color:#9ca3af; font-size:14px; margin-bottom:10px; display:none; }
+    .input{
+      width:100%; height:48px; padding:0 14px; font-size:16px;
+      border:1px solid var(--border); border-radius:12px; outline:none;
+      transition:border-color .15s, box-shadow .15s;
+    }
+    .input::placeholder{ color:#c0c4cc; }
+    .input:focus{
+      border-color:var(--focus);
+      box-shadow:0 0 0 4px rgba(0,0,0,.06);
+    }
+
+    /* 반응형: 모바일에서 스택 */
+    @media (max-width: 800px){
+      .wrap{ grid-template-columns: 1fr; gap:20px; }
+      .left{ align-items:flex-start; }
+    }
+  </style>
 </head>
 <body>
-  <form id="projectForm">
-    <h3>프로젝트 제목</h3>
-    <input type="text" name="title" required placeholder="예) XR 캠페인">
-
-    <h3>목적</h3>
-    <div class="options" data-group="purpose">
-      <div class="option-btn">브랜드 홍보</div>
-      <div class="option-btn">제품 홍보</div>
-      <div class="option-btn">이벤트/행사</div>
-      <div class="option-btn">기타</div>
+  <section class="wrap">
+    <!-- 왼쪽: 1번 -->
+    <div class="left" aria-hidden="true">
+      <div class="step">1</div>
+      <h2>프로젝트 제목을 입력하세요</h2>
     </div>
 
-    <h3>산업</h3>
-    <div class="options" data-group="industry">
-      <div class="option-btn">리테일</div>
-      <div class="option-btn">문화/예술</div>
-      <div class="option-btn">IT/통신</div>
-      <div class="option-btn">기타</div>
+    <!-- 오른쪽: 라벨 + 인풋 -->
+    <div class="right">
+      <div class="field">
+        <label for="title">프로젝트 제목</label>
+        <input id="title" name="title" class="input" required
+               placeholder="예) 뉴미디어 XR 캠페인" autocomplete="off" />
+      </div>
     </div>
-
-    <h3>일정 & 예산</h3>
-    <input type="date" name="start_date">
-    <input type="date" name="end_date">
-    <select name="budget">
-      <option>500만 원 이하</option>
-      <option>500만 ~ 1000만 원</option>
-      <option>1000만 원 이상</option>
-    </select>
-    <select name="nda">
-      <option>필요</option>
-      <option>불필요</option>
-    </select>
-
-    <h3>담당자 정보</h3>
-    <input type="text" name="name" placeholder="이름" required>
-    <input type="email" name="email" placeholder="이메일" required>
-    <input type="tel" name="phone" placeholder="연락처">
-    <input type="text" name="company" placeholder="회사명">
-
-    <button type="submit">등록하기 →</button>
-  </form>
-
-  <style>
-    form { font-family: sans-serif; max-width: 500px; margin: 0 auto; }
-    h3 { margin-top: 20px; font-size: 16px; }
-    input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; }
-    .options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-    .option-btn { padding: 6px 12px; border: 1px solid #aaa; border-radius: 6px; cursor: pointer; user-select: none; }
-    .option-btn.active { background: #000; color: #fff; }
-    button { margin-top: 20px; width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; }
-  </style>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // 선택 버튼 토글
-      document.querySelectorAll('.options').forEach(container => {
-        container.addEventListener('click', (ev) => {
-          const btn = ev.target.closest('.option-btn');
-          if (!btn) return;
-          btn.classList.toggle('active');
-        });
-      });
-
-      // 제출 처리
-      const form = document.getElementById('projectForm');
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        // 1) 기본 입력값 수집
-        const formData = new FormData(form);
-        const data = {};
-        formData.forEach((v, k) => data[k] = v);
-
-        // 2) 선택 버튼 값 수집
-        document.querySelectorAll('.options[data-group]').forEach(container => {
-          const key = container.dataset.group;
-          const vals = [...container.querySelectorAll('.option-btn.active')].map(x => x.textContent.trim());
-          data[key] = vals.join(', ');
-        });
-
-        // 3) GAS URL (배포한 웹 앱 주소)
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbwSZBKs57PJQ-6PzYNxR8gx30CsOxPrwFk_xa0TiXRHLeYJyYoPEX4RZWHiWHePvuW-TA/exec";
-
-        // ⚠️ 프리플라이트 회피: 폼인코딩으로 전송 (브라우저가 자동으로 Content-Type 설정)
-        const body = new URLSearchParams({ payload: JSON.stringify(data) });
-
-        try {
-          await fetch(GAS_URL, {
-            method: 'POST',
-            mode: 'no-cors',   // 응답 읽지는 않지만 안정적으로 전송
-            body               // application/x-www-form-urlencoded;charset=UTF-8 로 전송됨
-          });
-
-          alert('✅ 등록 요청 완료! (시트/Slack에서 확인하세요)');
-
-          // 폼 초기화
-          form.reset();
-          document.querySelectorAll('.option-btn.active').forEach(el => el.classList.remove('active'));
-        } catch (err) {
-          console.error('[SEND ERROR]', err);
-          alert('⚠️ 서버 오류: ' + err.message);
-        }
-      });
-    });
-  </script>
+  </section>
 </body>
 </html>
