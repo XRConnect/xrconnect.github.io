@@ -1,116 +1,115 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>프로젝트 등록</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
   <form id="projectForm">
-  <h3>프로젝트 제목</h3>
-  <input type="text" name="title" required placeholder="예) XR 캠페인">
+    <h3>프로젝트 제목</h3>
+    <input type="text" name="title" required placeholder="예) XR 캠페인">
 
-  <h3>목적</h3>
-  <div class="options" data-group="purpose">
-    <div class="option-btn">브랜드 홍보</div>
-    <div class="option-btn">제품 홍보</div>
-    <div class="option-btn">이벤트/행사</div>
-    <div class="option-btn">기타</div>
-  </div>
+    <h3>목적</h3>
+    <div class="options" data-group="purpose">
+      <div class="option-btn">브랜드 홍보</div>
+      <div class="option-btn">제품 홍보</div>
+      <div class="option-btn">이벤트/행사</div>
+      <div class="option-btn">기타</div>
+    </div>
 
-  <h3>산업</h3>
-  <div class="options" data-group="industry">
-    <div class="option-btn">리테일</div>
-    <div class="option-btn">문화/예술</div>
-    <div class="option-btn">IT/통신</div>
-    <div class="option-btn">기타</div>
-  </div>
+    <h3>산업</h3>
+    <div class="options" data-group="industry">
+      <div class="option-btn">리테일</div>
+      <div class="option-btn">문화/예술</div>
+      <div class="option-btn">IT/통신</div>
+      <div class="option-btn">기타</div>
+    </div>
 
-  <h3>일정 & 예산</h3>
-  <input type="date" name="start_date">
-  <input type="date" name="end_date">
-  <select name="budget">
-    <option>500만 원 이하</option>
-    <option>500만 ~ 1000만 원</option>
-    <option>1000만 원 이상</option>
-  </select>
-  <select name="nda">
-    <option>필요</option>
-    <option>불필요</option>
-  </select>
+    <h3>일정 & 예산</h3>
+    <input type="date" name="start_date">
+    <input type="date" name="end_date">
+    <select name="budget">
+      <option>500만 원 이하</option>
+      <option>500만 ~ 1000만 원</option>
+      <option>1000만 원 이상</option>
+    </select>
+    <select name="nda">
+      <option>필요</option>
+      <option>불필요</option>
+    </select>
 
-  <h3>담당자 정보</h3>
-  <input type="text" name="name" placeholder="이름" required>
-  <input type="email" name="email" placeholder="이메일" required>
-  <input type="tel" name="phone" placeholder="연락처">
-  <input type="text" name="company" placeholder="회사명">
+    <h3>담당자 정보</h3>
+    <input type="text" name="name" placeholder="이름" required>
+    <input type="email" name="email" placeholder="이메일" required>
+    <input type="tel" name="phone" placeholder="연락처">
+    <input type="text" name="company" placeholder="회사명">
 
-  <button type="submit">등록하기 →</button>
-</form>
+    <button type="submit">등록하기 →</button>
+  </form>
 
-<style>
-  form { font-family: sans-serif; max-width: 500px; margin: 0 auto; }
-  h3 { margin-top: 20px; font-size: 16px; }
-  input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; }
-  .options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-  .option-btn { padding: 6px 12px; border: 1px solid #aaa; border-radius: 6px; cursor: pointer; user-select: none; }
-  .option-btn.active { background: #000; color: #fff; }
-  button { margin-top: 20px; width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; }
-</style>
+  <style>
+    form { font-family: sans-serif; max-width: 500px; margin: 0 auto; }
+    h3 { margin-top: 20px; font-size: 16px; }
+    input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; }
+    .options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .option-btn { padding: 6px 12px; border: 1px solid #aaa; border-radius: 6px; cursor: pointer; user-select: none; }
+    .option-btn.active { background: #000; color: #fff; }
+    button { margin-top: 20px; width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; }
+  </style>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // 선택 버튼 토글
-    document.querySelectorAll('.options').forEach(container => {
-      container.addEventListener('click', (ev) => {
-        const btn = ev.target.closest('.option-btn');
-        if (!btn) return;
-        btn.classList.toggle('active');
-      });
-    });
-
-    // 제출 처리
-    const form = document.getElementById('projectForm');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      // 1) 기본 입력값 수집
-      const formData = new FormData(form);
-      const data = {};
-      formData.forEach((v, k) => data[k] = v);
-
-      // 2) 선택 버튼 값 수집
-      document.querySelectorAll('.options[data-group]').forEach(container => {
-        const key = container.dataset.group;
-        const vals = [...container.querySelectorAll('.option-btn.active')]
-          .map(x => x.textContent.trim());
-        data[key] = vals.join(', ');
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 선택 버튼 토글
+      document.querySelectorAll('.options').forEach(container => {
+        container.addEventListener('click', (ev) => {
+          const btn = ev.target.closest('.option-btn');
+          if (!btn) return;
+          btn.classList.toggle('active');
+        });
       });
 
-      console.log('[SEND DATA]', data);
+      // 제출 처리
+      const form = document.getElementById('projectForm');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-      // 3) GAS URL (배포한 웹 앱 주소)
-      const GAS_URL = "https://script.google.com/macros/s/AKfycbxauxN_xD19rAW66gBSc0CwzLMCjQFNPHa0T6q2-wzzwfNcn_zZupIypQXBuSReHq3xzw/exec";
+        // 1) 기본 입력값 수집
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((v, k) => data[k] = v);
 
-      try {
-       // ...
-  await fetch(GAS_URL, {
-    method: 'POST',
-    mode: 'no-cors',          // 응답은 못 읽지만 오류 없이 전송됨
-    body: JSON.stringify(data) // GAS에서 JSON.parse로 처리
-  });
+        // 2) 선택 버튼 값 수집
+        document.querySelectorAll('.options[data-group]').forEach(container => {
+          const key = container.dataset.group;
+          const vals = [...container.querySelectorAll('.option-btn.active')].map(x => x.textContent.trim());
+          data[key] = vals.join(', ');
+        });
 
-        // 성공 메시지 띄우기
-        alert('✅ 등록 요청 완료! (시트/Slack에서 확인하세요)');
+        // 3) GAS URL (배포한 웹 앱 주소)
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbwSZBKs57PJQ-6PzYNxR8gx30CsOxPrwFk_xa0TiXRHLeYJyYoPEX4RZWHiWHePvuW-TA/exec";
 
-        // 폼 초기화
-        form.reset();
-        document.querySelectorAll('.option-btn.active').forEach(el => el.classList.remove('active'));
-      } catch (err) {
-        console.error('[SEND ERROR]', err);
-        alert('⚠️ 서버 오류: ' + err.message);
-      }
+        // ⚠️ 프리플라이트 회피: 폼인코딩으로 전송 (브라우저가 자동으로 Content-Type 설정)
+        const body = new URLSearchParams({ payload: JSON.stringify(data) });
+
+        try {
+          await fetch(GAS_URL, {
+            method: 'POST',
+            mode: 'no-cors',   // 응답 읽지는 않지만 안정적으로 전송
+            body               // application/x-www-form-urlencoded;charset=UTF-8 로 전송됨
+          });
+
+          alert('✅ 등록 요청 완료! (시트/Slack에서 확인하세요)');
+
+          // 폼 초기화
+          form.reset();
+          document.querySelectorAll('.option-btn.active').forEach(el => el.classList.remove('active'));
+        } catch (err) {
+          console.error('[SEND ERROR]', err);
+          alert('⚠️ 서버 오류: ' + err.message);
+        }
+      });
     });
-  });
-</script>
+  </script>
 </body>
 </html>
