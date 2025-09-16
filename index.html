@@ -92,13 +92,12 @@
       const GAS_URL = "https://script.google.com/macros/s/AKfycbxauxN_xD19rAW66gBSc0CwzLMCjQFNPHa0T6q2-wzzwfNcn_zZupIypQXBuSReHq3xzw/exec";
 
       try {
-        // 요청 보내기 (no-cors 모드 → 응답은 확인 불가)
-        await fetch(GAS_URL, {
-          method: 'POST',
-          mode: 'no-cors',   // 👈 이거 덕분에 Failed to fetch 안 뜸
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
+       // ...
+  await fetch(GAS_URL, {
+    method: 'POST',
+    mode: 'no-cors',          // 응답은 못 읽지만 오류 없이 전송됨
+    body: JSON.stringify(data) // GAS에서 JSON.parse로 처리
+  });
 
         // 성공 메시지 띄우기
         alert('✅ 등록 요청 완료! (시트/Slack에서 확인하세요)');
