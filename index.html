@@ -15,13 +15,17 @@
 
     /* 공통 레이아웃 */
     .wrap{ display:grid; grid-template-columns: 480px 1fr; gap:48px; align-items:flex-start; }
-    .section{ padding:120px 0 40px; }               /* ← 각 섹션 top/bottom 120px */
+    .section{ padding:80px 0 40px; }               /* ← 각 섹션 top/bottom 120px */
     .left{ display:flex; align-items:center; gap:16px; width:480px; }
     .step{ width:36px; height:36px; border-radius:50%; background:#252525; color:#fff;
       display:grid; place-items:center; font-weight:700; }
     .left h2{ margin:0; font-size:24px; font-weight:700; letter-spacing:-0.02em; }
     .help{ margin:0 0 16px; color:var(--muted); font-size:14px; }
     .title-wrap{display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 16px;}
+    /* select에도 .input 룩 적용 (이미 있다면 중복 추가 불필요) */
+    select.input{ -webkit-appearance:none; appearance:none; background-color:#fff; background-image: linear-gradient(45deg, transparent 50%, #999 50%),
+    linear-gradient(135deg, #999 50%, transparent 50%); background-position: calc(100% - 22px) calc(50% - 3px), calc(100% - 16px) calc(50% - 3px);
+    background-size:6px 6px, 6px 6px; background-repeat:no-repeat; padding-right:40px; }
 
     /* 입력 */
     .group label{ display:block; margin-bottom:16px; font-weight:700; font-size:16px; }
@@ -47,6 +51,7 @@
     .tile .label{ font-size:16px; }
     .tile.active{ background:#252525; color:#fff; border-color:#252525; }
 
+
     /* 칩(산업/콘텐츠/디바이스) */
     .chips{ display:flex; flex-wrap:wrap; gap:8px; }
     .chip{
@@ -57,6 +62,9 @@
     .chip:active{ transform: scale(.98); }
     .chip.active{ background:#252525; color:#fff; border-color:#707070; }
 
+    /* 섹션4 묶음 스타일 */
+    .field-stack{ display:flex; flex-direction:column; /* gap:28px; */      /* 두 묶음 사이 간격 (원하면 24~36로 조절) */ }
+    .row-2col{  display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); column-gap:16px;     /* 같은 묶음 내 좌우 간격 */  row-gap:16px; }
     .group{ margin-bottom:56px; }
     .group h3{ font-size:16px; font-weight:700; margin-top: 0 !important; }
     .textarea{ width:100%; min-height:120px; padding:16px; border:1px solid var(--border); border-radius:16px; font-family: inter; font-size: 14px; }
@@ -74,7 +82,9 @@
     .cta:disabled{ opacity:.6; cursor:not-allowed; }
 
     @media (max-width: 1000px){ .wrap{ grid-template-columns: 1fr; gap:24px; } .left{ width:auto; } }
+    @media (max-width: 800px){ .row-2col{ grid-template-columns: 1fr; } }
     @media (max-width: 640px){ .tiles{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
   </style>
 </head>
 <body>
@@ -108,13 +118,34 @@
           <div class="group" data-name="purpose" data-multi="true">
             <h3>목적</h3>
             <div class="tiles">
-              <div class="tile" data-value="브랜드 홍보"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/brand.svg" alt="brand" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">브랜드 홍보</span></div>
-              <div class="tile" data-value="제품 홍보"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/product.svg" alt="product" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">제품 홍보</span></div>
-              <div class="tile" data-value="이벤트 / 행사"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/event.svg" alt="event" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">이벤트/행사</span></div>
-              <div class="tile" data-value="디지털 트윈"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/digitaltwin.svg" alt="digitaltwin" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">디지털 트윈</span></div>
-              <div class="tile" data-value="미디어 아트"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/mediaart.svg" alt="mediaart." width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">미디어 아트</span></div>
-              <div class="tile" data-value="AI 콘텐츠"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/ai.svg" alt="ai" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">AI 콘텐츠</span></div>
-              <div class="tile" data-value="기타"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/etc.svg" alt="etc" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">기타</span></div>
+              <div class="tile" data-value="브랜드 홍보"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/brand.svg"
+		data-src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/brand.svg"
+		data-active="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/brand_l.svg"
+		alt="brand" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">브랜드 홍보</span></div>
+              <div class="tile" data-value="제품 홍보"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/product.svg"
+		data-src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/product.svg"
+		data-active="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/product_l.svg"
+		alt="product" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">제품 홍보</span></div>
+              <div class="tile" data-value="이벤트 / 행사"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/event.svg"
+		data-src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/event.svg"
+		data-active="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/event_l.svg"
+		 alt="event" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">이벤트/행사</span></div>
+              <div class="tile" data-value="디지털 트윈"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/digitaltwin.svg"
+		data-src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/digitaltwin.svg"
+		data-active="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/digitaltwin_l.svg"
+		 alt="digitaltwin" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">디지털 트윈</span></div>
+              <div class="tile" data-value="미디어 아트"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/mediaart.svg"
+		data-src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/mediaart.svg"
+		data-active="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/mediaart_l.svg"
+		alt="mediaart." width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">미디어 아트</span></div>
+              <div class="tile" data-value="AI 콘텐츠"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/ai.svg"
+		data-src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/ai.svg"
+		data-active="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/ai_l.svg"
+		alt="ai" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">AI 콘텐츠</span></div>
+              <div class="tile" data-value="기타"><span class="icon"><img src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/etc.svg"
+		data-src="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/etc.svg"
+		data-active="https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/etc_l.svg"
+		alt="etc" width="56" height="57" loading="lazy" decoding="async"/></span><span class="label">기타</span></div>
             </div>
           </div>
 
@@ -178,6 +209,91 @@
           <input type="hidden" name="devices" />
         </div>
       </section>
+      <!-- 3) 참고 자료 -->
+<section class="wrap section" aria-label="참고 자료가 있으신가요?">
+  <div class="left" aria-hidden="true" style="align-items: flex-start;">
+    <div class="step">3</div>
+    <div class="title-wrap">
+      <h2>참고 자료가 있으신가요?</h2>
+      <!-- 필요하면 안내문 추가 가능
+      <p class="help">보유하신 자료를 선택하고 링크나 설명을 남겨 주세요.</p>
+      -->
+    </div>
+  </div>
+
+  <div class="right">
+    <!-- 보유 리소스 (다중 선택, '없음'은 배타 선택) -->
+    <div class="group" data-name="resources" data-multi="true">
+      <h3>보유 리소스</h3>
+      <div class="chips">
+        <div class="chip" data-value="도면 / 설계 자료">도면 / 설계 자료</div>
+        <div class="chip" data-value="3D 소스">3D 소스</div>
+        <div class="chip" data-value="참고 이미지 / 영상">참고 이미지 / 영상</div>
+        <div class="chip" data-value="기타">기타</div>
+        <div class="chip" data-value="없음 (올인원 신청)" data-exclusive="true">없음 (올인원 신청)</div>
+      </div>
+    </div>
+
+    <!-- 링크/설명 -->
+    <div class="group">
+      <h3>레퍼런스 / 요구사항 링크가 있나요?</h3>
+      <textarea class="textarea" name="reference" placeholder="URL or 기타 설명"></textarea>
+    </div>
+
+    <!-- 숨은 필드: 선택값 CSV -->
+    <input type="hidden" name="resources" />
+  </div>
+</section>
+<!-- 4) 일정과 예산 -->
+<section class="wrap section" aria-label="일정과 예산을 선택하세요">
+  <div class="left" aria-hidden="true" style="align-items: flex-start;">
+    <div class="step">4</div>
+    <div class="title-wrap">
+      <h2>일정과 예산을 선택하세요</h2>
+    </div>
+  </div>
+
+  <div class="right">
+  <div class="field-stack">
+    <!-- 묶음 #1: 날짜 2개 -->
+    <div class="row-2col">
+      <div class="group">
+        <label for="startDate">희망 시작일</label>
+        <input id="startDate" name="start_date" type="date" class="input" placeholder="연도 - 월 - 일" />
+      </div>
+      <div class="group">
+        <label for="endDate">런칭 / 마감일</label>
+        <input id="endDate" name="end_date" type="date" class="input" placeholder="연도 - 월 - 일" />
+      </div>
+    </div>
+
+    <!-- 묶음 #2: 예산 / NDA -->
+    <div class="row-2col">
+      <div class="group">
+        <label for="budget">예산 구간</label>
+        <select id="budget" name="budget" class="input">
+          <option value="" selected disabled>선택하세요</option>
+          <option value="~1천만원">~ 1천만원</option>
+          <option value="1천만~3천만원">1천만 ~ 3천만원</option>
+          <option value="3천만~5천만원">3천만 ~ 5천만원</option>
+          <option value="5천만~1억원">5천만 ~ 1억원</option>
+          <option value="1억원 이상">1억원 이상</option>
+          <option value="미정">미정</option>
+        </select>
+      </div>
+      <div class="group">
+        <label for="nda">NDA(비밀유지) 필요 여부</label>
+        <select id="nda" name="nda" class="input">
+          <option value="" selected disabled>선택하세요</option>
+          <option value="필요">필요</option>
+          <option value="불필요">불필요</option>
+          <option value="논의 필요">논의 필요</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
     </form>
   </div>
 
@@ -189,60 +305,136 @@
   </div>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbydgL1hWh_ZKbJdkLB_K8le1DG8jAKXgx6oe1loNZjff2lA8zadYBpkycmXmmm85PkV1A/exec';
-    const form = document.getElementById('titleForm');
-    const submitBtn = document.getElementById('submitBtn');
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbydgL1hWh_ZKbJdkLB_K8le1DG8jAKXgx6oe1loNZjff2lA8zadYBpkycmXmmm85PkV1A/exec';
+  const form = document.getElementById('titleForm');
+  const submitBtn = document.getElementById('submitBtn');
 
-    // 선택 로직(타일/칩 공통) + 숨은 필드 동기화
-    function updateHiddenFromGroup(group){
-      const name = group.dataset.name;
-      if (!name) return;
-      const multi = group.dataset.multi === 'true';
-      const active = [...group.querySelectorAll('.tile.active, .chip.active')].map(el => el.dataset.value);
-      const hidden = form.querySelector(`input[name="${name}"]`);
-      if (hidden) hidden.value = multi ? active.join(', ') : (active[0] || '');
-    }
-    function initSelectable(){
-      document.querySelectorAll('.group[data-name]').forEach(group => {
-        group.addEventListener('click', (e)=>{
-          const el = e.target.closest('.tile, .chip');
-          if (!el) return;
-          const multi = group.dataset.multi === 'true';
-          if (multi) el.classList.toggle('active');
-          else { group.querySelectorAll('.tile.active, .chip.active').forEach(n => n.classList.remove('active')); el.classList.add('active'); }
-          updateHiddenFromGroup(group);
-        });
-      });
-    }
-    initSelectable();
+  function updateHiddenFromGroup(group){
+    const name = group.dataset.name;
+    if (!name) return;
+    const multi = group.dataset.multi === 'true';
+    const active = [...group.querySelectorAll('.tile.active, .chip.active')].map(el => el.dataset.value);
+    const hidden = form.querySelector(`input[name="${name}"]`);
+    if (hidden) hidden.value = multi ? active.join(', ') : (active[0] || '');
+  }
 
-    // 제출
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!form.reportValidity()) return;
+  // 선택된 상태에 맞춰 타일 아이콘 src 교체
+  function updateTileIcon(tile){
+    const img = tile.querySelector('img[data-src][data-active]');
+    if (!img) return;
+    const next = tile.classList.contains('active') ? img.dataset.active : img.dataset.src;
+    if (img.src !== next) img.src = next;
+  }
 
-      // 제출 직전 동기화(안전망)
-      document.querySelectorAll('.group[data-name]').forEach(updateHiddenFromGroup);
-
-      submitBtn.disabled = true;
-      try {
-        const params = new URLSearchParams(new FormData(form)); // x-www-form-urlencoded
-        const res = await fetch(SCRIPT_URL, { method:'POST', body: params });
-        let data = null; try { data = await res.json(); } catch(_) {}
-        if (!res.ok || (data && data.ok === false)) {
-          const msg = (data && data.error) ? data.error : 'Network or server error';
-          throw new Error(msg);
+  // 이벤트 바인딩 (단 한 번만)
+  function initSelectable(){
+    document.querySelectorAll('.group[data-name]').forEach(group => {
+      group.addEventListener('click', (e)=>{
+        const el = e.target.closest('.tile, .chip');
+        if (!el) return;
+        if (el.hasAttribute('disabled') || el.classList.contains('disabled')) return;
+        const multi = group.dataset.multi === 'true';
+        if (multi) {
+          el.classList.toggle('active');
+          if (el.classList.contains('tile')) updateTileIcon(el);
+        } else {
+          group.querySelectorAll('.tile.active, .chip.active').forEach(n => {
+            n.classList.remove('active');
+            if (n.classList.contains('tile')) updateTileIcon(n);
+          });
+          el.classList.add('active');
+          if (el.classList.contains('tile')) updateTileIcon(el);
         }
-        alert('등록되었습니다. 감사합니다!');
-        form.reset();
-        document.querySelectorAll('.tile.active, .chip.active').forEach(n => n.classList.remove('active'));
-      } catch (err) {
-        console.error(err);
-        alert('전송 실패: ' + err.message);
-      } finally {
-        submitBtn.disabled = false;
+	// '없음 (올인원 신청)'은 배타 선택 처리
+      if (group.dataset.name === 'resources') {
+        const isExclusive = el.dataset.exclusive === 'true';
+        const noneChip = group.querySelector('.chip[data-exclusive="true"]');
+
+        if (isExclusive) {
+          // '없음'을 눌렀다면 다른 칩 비활성화
+          group.querySelectorAll('.chip.active').forEach(n => {
+            if (n !== el) n.classList.remove('active');
+          });
+        } else if (noneChip && noneChip.classList.contains('active')) {
+          // 다른 칩을 고르면 '없음' 비활성화
+          noneChip.classList.remove('active');
+        }
       }
+      /* ======================= */
+
+        updateHiddenFromGroup(group);
+      });
     });
-  </script>
+
+   // 초기 아이콘 상태 정리
+document.querySelectorAll('.tile').forEach(updateTileIcon);
+}
+initSelectable();
+
+// ↓ 하드코딩 프리로드는 제거(중복 방지)
+// ['brand_w.svg','product_w.svg' /* ... */].forEach(src => {
+//   const i = new Image();
+//   i.src = 'https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/' + src;
+// });
+
+// 자동 프리로드(IIFE) - 세미콜론으로 안전하게 시작
+;(function preloadActiveIcons(){
+  const urls = Array.from(document.querySelectorAll('.tile img[data-active]'))
+    .map(img => img.dataset.active)
+    .filter(Boolean);
+  urls.forEach(src => { const i = new Image(); i.src = src; });
+})();
+
+
+  // 제출
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+
+    document.querySelectorAll('.group[data-name]').forEach(updateHiddenFromGroup);
+
+    submitBtn.disabled = true;
+    try {
+      const params = new URLSearchParams(new FormData(form));
+      const res = await fetch(SCRIPT_URL, { method:'POST', body: params });
+      let data = null; try { data = await res.json(); } catch(_) {}
+      if (!res.ok || (data && data.ok === false)) {
+        const msg = (data && data.error) ? data.error : 'Network or server error';
+        throw new Error(msg);
+      }
+      alert('등록되었습니다. 감사합니다!');
+      form.reset();
+      document.querySelectorAll('.tile.active, .chip.active').forEach(n => { n.classList.remove('active');
+      if (n.classList.contains('tile')) updateTileIcon(n);
+      });
+     // 제출 try 블록의 reset 이후에 추가
+     if (endDate) endDate.min = '';
+    // 히든 값도 초기화
+     document.querySelectorAll('.group[data-name]').forEach(updateHiddenFromGroup);
+     } catch (err) { console.error(err);
+      alert('전송 실패: ' + err.message);
+     } finally {
+       submitBtn.disabled = false;
+     }
+   });
+  // === 일정 ===
+  const startDate = document.getElementById('startDate');
+  const endDate   = document.getElementById('endDate');
+ if (startDate && endDate){
+  startDate.addEventListener('change', ()=>{
+    endDate.min = startDate.value || '';
+    if (endDate.value && startDate.value && endDate.value < startDate.value) {
+      endDate.value = startDate.value; // 자동 보정
+    }
+  });
+  endDate.addEventListener('change', ()=>{
+    if (startDate.value && endDate.value < startDate.value) {
+      endDate.value = startDate.value;
+    }
+  });
+}
+  // =======================
+
+</script>
 </body>
 </html>
