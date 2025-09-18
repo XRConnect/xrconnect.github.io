@@ -83,6 +83,10 @@
   }
   .textarea::placeholder{ color:#bbb; }
   .textarea:focus{ border-color:#252525; box-shadow:0 0 0 4px rgba(0,0,0,.06); }
+  select { color: #252525; }
+  select:invalid { color: #707070; } /* placeholder 대체색 */
+  option[value=""] { color: #707070; }
+
 
   /* 네이티브 select(커스텀 제외) */
   select.input:not([data-enhance="select"]){
@@ -387,7 +391,7 @@
       <div class="group">
         <label for="budget">예산 구간</label>
          <select id="budget" name="budget" class="input" data-enhance="select">
-           <option value="" selected disabled>선택하세요</option>
+           <option value="" disabled selected hidden>선택하세요</option>
            <option value="~1천만원">~ 1천만원</option>
            <option value="1천만~3천만원">1천만 ~ 3천만원</option>
            <option value="3천만~5천만원">3천만 ~ 5천만원</option>
@@ -399,7 +403,7 @@
       <div class="group">
         <label for="nda">NDA(비밀유지) 필요 여부</label>
         <select id="nda" name="nda" class="input" data-enhance="select">
-          <option value="" selected disabled>선택하세요</option>
+          <option value="" disabled selected hidden>선택하세요</option>
           <option value="필요">필요</option>
           <option value="불필요">불필요</option>
           <option value="논의 필요">논의 필요</option>
