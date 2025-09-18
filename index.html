@@ -5,87 +5,200 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>XR Connect - 문의</title>
   <style>
-    :root{
-      --text:#252525; --border:#bbb; --bg:#fff; --dark:#707070; --muted:#707070;
-    }
-    *{box-sizing:border-box}
-    body{ margin:0; background:var(--bg); color:var(--text);
-      font-family: Inter; }
-    .container{ max-width:1200px; margin:0 auto; }
+  :root{
+    --text:#252525; --border:#bbb; --bg:#fff; --dark:#707070; --muted:#707070;
+  }
+  *{ box-sizing:border-box }
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  }
+  .container{ max-width:1200px; margin:0 auto; }
 
-    /* 공통 레이아웃 */
-    .wrap{ display:grid; grid-template-columns: 480px 1fr; gap:48px; align-items:flex-start; }
-    .section{ padding:80px 0 40px; }               /* ← 각 섹션 top/bottom 120px */
-    .left{ display:flex; align-items:center; gap:16px; width:480px; }
-    .step{ width:36px; height:36px; border-radius:50%; background:#252525; color:#fff;
-      display:grid; place-items:center; font-weight:700; }
-    .left h2{ margin:0; font-size:24px; font-weight:700; letter-spacing:-0.02em; }
-    .help{ margin:0 0 16px; color:var(--muted); font-size:14px; }
-    .title-wrap{display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 16px;}
-    /* select에도 .input 룩 적용 (이미 있다면 중복 추가 불필요) */
-    select.input{ -webkit-appearance:none; appearance:none; background-color:#fff; background-image: linear-gradient(45deg, transparent 50%, #999 50%),
-    linear-gradient(135deg, #999 50%, transparent 50%); background-position: calc(100% - 22px) calc(50% - 3px), calc(100% - 16px) calc(50% - 3px);
-    background-size:6px 6px, 6px 6px; background-repeat:no-repeat; padding-right:40px; }
+  /* 레이아웃 */
+  .wrap{ display:grid; grid-template-columns:480px 1fr; gap:48px; align-items:flex-start; }
+  .section{ padding:80px 0 40px; }
+  .left{ display:flex; align-items:center; gap:16px; width:480px; }
+  .step{
+    width:36px; height:36px; border-radius:50%; background:#252525; color:#fff;
+    display:grid; place-items:center; font-weight:700;
+  }
+  .left h2{ margin:0; font-size:24px; font-weight:700; letter-spacing:-0.02em; }
+  .help{ margin:0 0 16px; color:var(--muted); font-size:14px; }
+  .title-wrap{ display:flex; flex-direction:column; justify-content:center; align-items:flex-start; gap:16px; }
 
-    /* 입력 */
-    .group label{ display:block; margin-bottom:16px; font-weight:700; font-size:16px; }
-    .input{
-      width:100%; height:48px; padding:0 16px; font-size:14px;
-      border:1px solid var(--border); border-radius:12px; outline:none;
-      transition:border-color .15s, box-shadow .15s;
-    }
-    .input::placeholder{ color:#bbb; }
-    .input:focus{ border:2px solid #252525; box-shadow:0 0 0 4px rgba(0,0,0,.06); }
+  /* 입력 공통 */
+  .group label{ display:block; margin-bottom:16px; font-weight:700; font-size:16px; }
+  .input{
+    width:100%; height:48px; padding:0 16px; font-size:14px;
+    border:1px solid var(--border); border-radius:12px; outline:none;
+    transition:border-color .15s, box-shadow .15s;
+    background:#fff;
+  }
+  .input::placeholder{ color:#bbb; }
+  .input:focus{ border:2px solid #252525; box-shadow:0 0 0 4px rgba(0,0,0,.06); }
 
-    /* 목적 타일 + 아이콘 (다중 선택) */
-    .tiles{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px; }
-    .tile{
-      border:1px solid var(--border); border-radius:16px; padding:16px; height:160px;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
-      cursor:pointer; user-select:none; font-weight:500;
-      transition: border-color .15s, background .15s, color .15s, transform .05s;
-    }
-    .tile:active{ transform: scale(.99); }
-    .tile .icon{ display:inline-flex; align-items:center; justify-content:center; width:56px; height:57px; margin-bottom:8px; }
-    .tile .icon img{ width:100%; height:100%; object-fit:contain; vertical-align:middle; }
-    .tile .label{ font-size:16px; }
-    .tile.active{ background:#252525; color:#fff; border-color:#252525; }
+  /* Flatpickr altInput도 같은 룩 */
+  input.flatpickr-input.input{
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="%23707070" viewBox="0 0 24 24"><path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1V3a1 1 0 0 1 1-1zm-2 6v11h14V8H5z"/></svg>');
+    background-repeat:no-repeat; background-position:calc(100% - 14px) 50%; padding-right:44px;
+  }
+
+  /* 검증 */
+  .input.user-touched:invalid,
+  form.was-validated .input:invalid{ border-color:#ef4444; box-shadow:0 0 0 4px rgba(239,68,68,.12); }
+
+  /* 목적 타일 */
+  .tiles{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px; }
+  .tile{
+    border:1px solid var(--border); border-radius:16px; padding:16px; height:160px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+    cursor:pointer; user-select:none; font-weight:500;
+    transition:border-color .15s, background .15s, color .15s, transform .05s;
+  }
+  .tile:active{ transform:scale(.99); }
+  .tile .icon{ display:inline-flex; align-items:center; justify-content:center; width:56px; height:57px; margin-bottom:8px; }
+  .tile .icon img{ width:100%; height:100%; object-fit:contain; vertical-align:middle; }
+  .tile .label{ font-size:16px; }
+  .tile.active{ background:#252525; color:#fff; border-color:#252525; }
+  .group[data-name="purpose"] .tiles{ display:grid!important; grid-template-columns:repeat(3,minmax(0,1fr))!important; gap:12px; }
+
+  /* 칩 */
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    border:1px solid var(--border); border-radius:999px; padding:12px 16px; cursor:pointer; user-select:none;
+    font-weight:500; font-size:14px; line-height:1;
+    transition:border-color .15s, background .15s, color .15s, transform .05s;
+  }
+  .chip:active{ transform:scale(.98); }
+  .chip.active{ background:#252525; color:#fff; border-color:#707070; }
+
+  /* 섹션4 레이아웃 */
+  .field-stack{ display:flex; flex-direction:column; }
+  .row-2col{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); column-gap:16px; row-gap:16px; }
+  .group{ margin-bottom:56px; }
+  .group h3{ font-size:16px; font-weight:700; margin-top:0 !important; }
+  .textarea{
+    width:100%; min-height:120px; padding:16px; border:1px solid var(--border); border-radius:16px; font-family:Inter, sans-serif; font-size:14px;
+  }
+  .textarea::placeholder{ color:#bbb; }
+  .textarea:focus{ border-color:#252525; box-shadow:0 0 0 4px rgba(0,0,0,.06); }
+
+  /* 네이티브 select(커스텀 제외) */
+  select.input:not([data-enhance="select"]){
+    -webkit-appearance:none; appearance:none;
+    width:100%; height:48px; padding:0 48px 0 16px;
+    font-size:14px; line-height:1; border:1px solid var(--border);
+    border-radius:12px; outline:none; background:#fff;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23707070" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+    background-repeat:no-repeat; background-position:right 14px center; background-size:20px 20px;
+    transition:border-color .15s, box-shadow .15s, background-color .15s; cursor:pointer; color:var(--text);
+  }
+
+  /* ===== Custom Select ===== */
+  .cs{ position:relative; width:100%; }
+  /* 네이티브 select는 완전히 숨긴 채 값만 가져감 */
+  .cs select{
+    position:absolute; inset:0; width:100%; height:100%;
+    opacity:0 !important; pointer-events:none !important; z-index:0 !important;
+    -webkit-appearance:none !important; appearance:none !important;
+  }
+
+  /* 트리거(닫힌 상태) */
+  .cs-trigger{
+    position:relative; z-index:1;
+    width:100%; height:48px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 16px; font-size:14px; line-height:1;
+    border:1px solid var(--border); border-radius:12px; background:#fff;
+    cursor:pointer; transition:border-color .15s, box-shadow .15s;
+  }
+  .cs-trigger:hover{ border-color:#999; }
+  .cs-trigger:focus{ outline:none; border:2px solid #252525; box-shadow:0 0 0 4px rgba(0,0,0,.06); }
+
+  .cs-arrow{
+    flex:0 0 auto; width:20px; height:20px; margin-left:8px;
+    background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23707070" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>') no-repeat center/20px 20px;
+    transition:transform .15s;
+  }
+  .cs[aria-expanded="true"] .cs-arrow{ transform:rotate(180deg); }
+
+  /* 패널: 기본 숨김 → 열리면 보임 */
+  .cs-panel{
+    display:none;
+    position:absolute; left:0; right:0; top:calc(100% + 8px);
+    background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+    box-shadow:0 12px 24px rgba(0,0,0,.12);
+    padding:10px; z-index:1000;
+    max-height:280px; overflow:auto;
+    font-size:14px; line-height:1.5;
+  }
+  .cs[aria-expanded="true"] .cs-panel{ display:block; }
+
+  /* 옵션 */
+  .cs-option{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 14px; border-radius:10px; cursor:pointer;
+  }
+  .cs-option + .cs-option{ margin-top:4px; }
+  .cs-option:hover{ background:#f5f5f5; }
+  .cs-option[aria-selected="true"]{ background:#f7f7f7; font-weight:600; }
+
+  /* 비활성(placeholder/disabled) */
+  .cs-option[aria-disabled="true"]{ color:#9ca3af; cursor:default; }
+  .cs-option[aria-disabled="true"]:hover{ background:transparent; }
+
+  /* 체크마크 */
+  .cs-check{
+    width:18px; height:18px; margin-left:12px; visibility:hidden;
+    background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%23252525" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') no-repeat center/18px 18px;
+  }
+  .cs-option[aria-selected="true"] .cs-check{ visibility:visible; }
+
+  /* placeholder 라벨 */
+  .cs-placeholder{ color:#9ca3af; }
+
+  /* 스크롤바(옵션 많을 때) */
+  .cs-panel::-webkit-scrollbar{ width:10px; }
+  .cs-panel::-webkit-scrollbar-thumb{ background:#e5e7eb; border-radius:8px; }
+  .cs-panel::-webkit-scrollbar-track{ background:transparent; }
+
+  /* 키보드 포커스 */
+  .cs-option:focus{ outline:2px solid rgba(0,0,0,.12); outline-offset:2px; }
+
+  /* 라벨 옆 필수 뱃지 */
+  .opt-badge{
+    display:inline-block; margin-top:-2px; margin-left:4px; padding:4px 8px; font-size:12px; line-height:1;
+    border-radius:999px; color:#fff; background:#D93136; vertical-align:middle; font-weight:500;
+  }
+
+  /* 하단 CTA */
+  .cta-bar{ position:relative; left:0; right:0; bottom:0; background:var(--dark); z-index:50; }
+  .cta{
+    width:100%; background:#252525; color:#fff; font-size:24px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; gap:8px; padding:24px 40px; cursor:pointer;
+  }
+  .cta .icon{
+    width:26px; height:26px; border:1px solid #fff; border-radius:9999px;
+    display:inline-flex; align-items:center; justify-content:center; font-size:14px; line-height:1;
+  }
+  .cta:disabled{ opacity:.6; cursor:not-allowed; }
+
+  /* 반응형 */
+  @media (max-width:1000px){ .wrap{ grid-template-columns:1fr; gap:24px; } .left{ width:auto; } }
+  @media (max-width:800px){ .row-2col{ grid-template-columns:1fr; } }
+  @media (max-width:640px){
+    .tiles{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    .group[data-name="purpose"] .tiles{ grid-template-columns:1fr!important; }
+    .cs-panel{ max-height:320px; }
+  }
+</style>
 
 
-    /* 칩(산업/콘텐츠/디바이스) */
-    .chips{ display:flex; flex-wrap:wrap; gap:8px; }
-    .chip{
-      border:1px solid var(--border); border-radius:999px; padding:12px 16px; cursor:pointer; user-select:none;
-      font-weight:500; font-size:14px; line-height:1;
-      transition: border-color .15s, background .15s, color .15s, transform .05s;
-    }
-    .chip:active{ transform: scale(.98); }
-    .chip.active{ background:#252525; color:#fff; border-color:#707070; }
+  <!-- ✅ Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
-    /* 섹션4 묶음 스타일 */
-    .field-stack{ display:flex; flex-direction:column; /* gap:28px; */      /* 두 묶음 사이 간격 (원하면 24~36로 조절) */ }
-    .row-2col{  display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); column-gap:16px;     /* 같은 묶음 내 좌우 간격 */  row-gap:16px; }
-    .group{ margin-bottom:56px; }
-    .group h3{ font-size:16px; font-weight:700; margin-top: 0 !important; }
-    .textarea{ width:100%; min-height:120px; padding:16px; border:1px solid var(--border); border-radius:16px; font-family: inter; font-size: 14px; }
-    .textarea::placeholder{ color:#bbb; }
-    .textarea:focus{ border-color:#252525; box-shadow:0 0 0 4px rgba(0,0,0,.06); }
-
-    /* 하단 CTA */
-    .cta-bar{ position:relative; left:0; right:0; bottom:0; background:var(--dark); z-index:50; }
-    .cta{
-      width:100%; background:#252525; color:#fff; font-size:24px; font-weight:700;
-      display:flex; align-items:center; justify-content:center; gap:8px; padding: 24px 40px; cursor:pointer;
-    }
-    .cta .icon{ width:26px; height:26px; border:1px solid #fff; border-radius:9999px;
-      display:inline-flex; align-items:center; justify-content:center; font-size:14px; line-height:1; }
-    .cta:disabled{ opacity:.6; cursor:not-allowed; }
-
-    @media (max-width: 1000px){ .wrap{ grid-template-columns: 1fr; gap:24px; } .left{ width:auto; } }
-    @media (max-width: 800px){ .row-2col{ grid-template-columns: 1fr; } }
-    @media (max-width: 640px){ .tiles{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
-
-  </style>
 </head>
 <body>
   <div class="container">
@@ -99,7 +212,7 @@
         <div class="right">
           <div class="group" style="margin: 0;">
             <label for="title">프로젝트 제목</label>
-            <input id="title" name="title" class="input" required placeholder="예) 뉴미디어 XR 캠페인" autocomplete="off" />
+            <input id="title" name="title" class="input" placeholder="예) 뉴미디어 XR 캠페인" autocomplete="off" />
           </div>
         </div>
       </section>
@@ -244,6 +357,7 @@
     <input type="hidden" name="resources" />
   </div>
 </section>
+
 <!-- 4) 일정과 예산 -->
 <section class="wrap section" aria-label="일정과 예산을 선택하세요">
   <div class="left" aria-hidden="true" style="align-items: flex-start;">
@@ -259,11 +373,11 @@
     <div class="row-2col">
       <div class="group">
         <label for="startDate">희망 시작일</label>
-        <input id="startDate" name="start_date" type="date" class="input" placeholder="연도 - 월 - 일" />
+        <input id="startDate" name="start_date" type="text" class="input" placeholder="연도 - 월 - 일" />
       </div>
       <div class="group">
         <label for="endDate">런칭 / 마감일</label>
-        <input id="endDate" name="end_date" type="date" class="input" placeholder="연도 - 월 - 일" />
+        <input id="endDate" name="end_date" type="text" class="input" placeholder="연도 - 월 - 일" />
       </div>
     </div>
 
@@ -271,19 +385,19 @@
     <div class="row-2col">
       <div class="group">
         <label for="budget">예산 구간</label>
-        <select id="budget" name="budget" class="input">
-          <option value="" selected disabled>선택하세요</option>
-          <option value="~1천만원">~ 1천만원</option>
-          <option value="1천만~3천만원">1천만 ~ 3천만원</option>
-          <option value="3천만~5천만원">3천만 ~ 5천만원</option>
-          <option value="5천만~1억원">5천만 ~ 1억원</option>
-          <option value="1억원 이상">1억원 이상</option>
-          <option value="미정">미정</option>
-        </select>
+         <select id="budget" name="budget" class="input" data-enhance="select">
+           <option value="" selected disabled>선택하세요</option>
+           <option value="~1천만원">~ 1천만원</option>
+           <option value="1천만~3천만원">1천만 ~ 3천만원</option>
+           <option value="3천만~5천만원">3천만 ~ 5천만원</option>
+           <option value="5천만~1억원">5천만 ~ 1억원</option>
+           <option value="1억원 이상">1억원 이상</option>
+           <option value="미정">미정</option>
+         </select>
       </div>
       <div class="group">
         <label for="nda">NDA(비밀유지) 필요 여부</label>
-        <select id="nda" name="nda" class="input">
+        <select id="nda" name="nda" class="input" data-enhance="select">
           <option value="" selected disabled>선택하세요</option>
           <option value="필요">필요</option>
           <option value="불필요">불필요</option>
@@ -294,6 +408,43 @@
   </div>
 </div>
 </section>
+<!-- 5) 기본 정보 -->
+<section class="wrap section" aria-label="기본 정보를 입력하세요" style="padding-bottom: 120px !important;">
+  <div class="left" aria-hidden="true" style="align-items: flex-start;">
+    <div class="step">5</div>
+    <div class="title-wrap">
+      <h2>기본 정보를 입력하세요</h2>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="field-stack">
+      <div class="row-2col">
+        <div class="group">
+          <label for="contactName">담당자 이름<span class="opt-badge">필수</span></label>
+          <input id="contactName" name="contact_name" type="text" class="input" required placeholder="이름" autocomplete="name" />
+        </div>
+
+        <div class="group">
+          <label for="email">이메일<span class="opt-badge">필수</span></label>
+          <input id="email" name="email" type="email" class="input" required placeholder="you@mail.com" autocomplete="email" />
+          <!-- 브라우저 기본 에러를 쓰되, setCustomValidity로 한국어 문구 지정 -->
+        </div>
+      </div>
+
+      <div class="row-2col">
+        <div class="group">
+          <label for="phone">연락처<span class="opt-badge">필수</span></label>
+          <input id="phone" name="phone" type="tel" class="input" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" required />
+        </div>
+        <div class="group">
+          <label for="company">회사명<span class="opt-badge">필수</span></label>
+          <input id="company" name="company" type="text" class="input" placeholder="" autocomplete="organization" required />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
     </form>
   </div>
 
@@ -303,11 +454,222 @@
       등록하기 <span class="icon">→</span>
     </button>
   </div>
+ <!-- body 끝부분: Flatpickr JS → 우리 스크립트 순서 -->
 
-  <script>
+<!-- Flatpickr loader -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+<script>
+  /** =========================
+   *  Flatpickr (섹션4 날짜)
+   *  ========================= */
+  // 전역 인스턴스
+  let fpStart, fpEnd;
+
+  window.addEventListener('DOMContentLoaded', () => {
+    fpStart = flatpickr("#startDate", {
+      locale: flatpickr.l10ns.ko,
+      dateFormat: "Y-m-d",        // submit 값
+      altInput: true,
+      altFormat: "Y년 m월 d일",     // 표시용
+      altInputClass: "input",      // 기존 .input 룩 적용
+      enableTime: false,
+      disableMobile: true,
+      onReady: (dates, str, instance) => { instance.altInput.placeholder = "연도 - 월 - 일"; },
+      onChange: (sel) => { if (sel[0] && fpEnd) fpEnd.set("minDate", sel[0]); } // ✅ 가드 추가
+    });
+
+    fpEnd = flatpickr("#endDate", {
+      locale: flatpickr.l10ns.ko,
+      dateFormat: "Y-m-d",
+      altInput: true,
+      altFormat: "Y년 m월 d일",
+      altInputClass: "input",
+      enableTime: false,
+      disableMobile: true,
+      onReady: (dates, str, instance) => { instance.altInput.placeholder = "연도 - 월 - 일"; }
+    });
+  });
+</script>
+<script>
+  // 섹션4 두 셀렉트를 대상
+  const selects = [document.getElementById('budget'), document.getElementById('nda')].filter(Boolean);
+
+  function updatePlaceholderState(sel){
+    const isEmpty = !sel.value || sel.value === '';
+    sel.classList.toggle('placeholder', isEmpty);
+  }
+  selects.forEach(sel=>{
+    updatePlaceholderState(sel);
+    // 포커스 아웃하면 '만짐' 표시 (유효성 스타일과 동일한 UX)
+    sel.addEventListener('blur', ()=> sel.classList.add('user-touched'));
+    sel.addEventListener('change', ()=> updatePlaceholderState(sel));
+  });
+</script>
+<script>
+/* ===== Custom Select (접근성 + 동기화) ===== */
+(function(){
+  const sels = document.querySelectorAll('select.input[data-enhance="select"]');
+  sels.forEach(sel => {
+    if (sel.closest('.cs')) return; // 이미 래핑된 경우 스킵
+    makeCustom(sel);
+  });
+
+  function makeCustom(sel){
+    const wrap = document.createElement('div');
+    wrap.className = 'cs';
+    wrap.setAttribute('role','combobox');
+    wrap.setAttribute('aria-haspopup','listbox');
+    wrap.setAttribute('aria-expanded','false');
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'cs-trigger';
+    const label = document.createElement('span');
+    label.textContent = sel.options[sel.selectedIndex]?.text || '선택하세요';
+    if (!sel.value) label.classList.add('cs-placeholder');
+    const arrow = document.createElement('span'); arrow.className='cs-arrow';
+    trigger.append(label, arrow);
+
+    const panel = document.createElement('div');
+    panel.className = 'cs-panel';
+    panel.setAttribute('role','listbox');
+
+    // 옵션 렌더링
+    Array.from(sel.options).forEach((opt)=>{
+      const isPlaceholder = (opt.value === '' || opt.disabled);
+      const item = document.createElement('div');
+      item.className = 'cs-option';
+      item.setAttribute('role','option');
+      item.dataset.value = opt.value;
+      item.setAttribute('tabindex', isPlaceholder ? '-1' : '0');
+      if (isPlaceholder) item.setAttribute('aria-disabled','true');
+
+      const text = document.createElement('span');
+      text.textContent = opt.textContent;
+      if (isPlaceholder) text.style.color = '#9ca3af';
+
+      const check = document.createElement('span');
+      check.className = 'cs-check';
+
+      item.append(text, check);
+
+      // 초기 선택 상태(placeholder는 선택 표시 X)
+      if (!isPlaceholder && opt.selected) item.setAttribute('aria-selected','true');
+
+      // placeholder/disabled는 클릭 불가
+      if (!isPlaceholder) {
+        item.addEventListener('click', ()=>{
+          selectValue(opt.value);
+          close();
+          trigger.focus();
+        });
+        item.addEventListener('keydown', (ev)=>{
+          if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); item.click(); }
+        });
+      }
+
+      panel.appendChild(item);
+    });
+
+    // DOM 배치
+    sel.parentNode.insertBefore(wrap, sel);
+    wrap.appendChild(sel);
+    wrap.appendChild(trigger);
+    wrap.appendChild(panel);
+
+    // 열기/닫기
+    function open(){
+      wrap.setAttribute('aria-expanded','true');
+      focusSelected();
+      document.addEventListener('click', onDocClick, { once:true });
+      document.addEventListener('keydown', onKey);
+    }
+    function close(){
+      wrap.setAttribute('aria-expanded','false');
+      document.removeEventListener('keydown', onKey);
+    }
+    function onDocClick(e){
+      if (!wrap.contains(e.target)) close();
+      else document.addEventListener('click', onDocClick, { once:true });
+    }
+    function onKey(e){
+      if (e.key === 'Escape') { close(); trigger.focus(); }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+        e.preventDefault(); moveFocus(e.key === 'ArrowDown' ? 1 : -1);
+      }
+    }
+    trigger.addEventListener('click', ()=>{
+      const isOpen = wrap.getAttribute('aria-expanded') === 'true';
+      isOpen ? close() : open();
+    });
+
+    // 값 선택
+    function selectValue(val){
+      const nativeOpt = Array.from(sel.options).find(o => o.value === val);
+      if (!nativeOpt || nativeOpt.disabled || val === '') return;
+
+      const opts = Array.from(panel.querySelectorAll('.cs-option'));
+      opts.forEach(o => o.removeAttribute('aria-selected'));
+      const target = opts.find(o=>o.dataset.value===val);
+      if (target) target.setAttribute('aria-selected','true');
+
+      sel.value = val;
+      sel.dispatchEvent(new Event('change', { bubbles:true }));
+
+      label.textContent = nativeOpt.textContent;
+      label.classList.toggle('cs-placeholder', !val);
+    }
+
+    // 포커스 유틸
+    function focusSelected(){
+      const current =
+        panel.querySelector('.cs-option[aria-selected="true"]') ||
+        panel.querySelector('.cs-option:not([aria-disabled="true"])');
+      if (current) current.focus();
+    }
+    function moveFocus(dir){
+      const items = Array.from(panel.querySelectorAll('.cs-option'));
+      let idx = items.indexOf(document.activeElement);
+      if (idx < 0) idx = 0;
+      let nextIdx = Math.min(items.length-1, Math.max(0, idx + dir));
+      // disabled는 건너뛰기
+      while (items[nextIdx] && items[nextIdx].getAttribute('aria-disabled') === 'true') {
+        nextIdx = Math.min(items.length-1, Math.max(0, nextIdx + dir));
+        if (nextIdx === idx) break;
+      }
+      if (items[nextIdx]) items[nextIdx].focus();
+    }
+
+    // 네이티브 값 변경과 동기화(초기 상태 포함)
+    sel.addEventListener('change', ()=>{
+      const val = sel.value || '';
+      const opt = Array.from(sel.options).find(o=>o.value===val) || sel.options[0];
+      label.textContent = opt.textContent;
+      label.classList.toggle('cs-placeholder', !val);
+      Array.from(panel.querySelectorAll('.cs-option')).forEach(o=>{
+        o.toggleAttribute('aria-selected', o.dataset.value===val);
+      });
+    });
+    sel.dispatchEvent(new Event('change'));
+  }
+})();
+</script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  // ❶ 인풋을 만졌는지 표시(blur 시)
+  document.querySelectorAll('.input').forEach(el => {
+    el.addEventListener('blur', () => el.classList.add('user-touched'));
+  });
+
+  /** =========================
+   *  공통 변수/유틸
+   *  ========================= */
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbydgL1hWh_ZKbJdkLB_K8le1DG8jAKXgx6oe1loNZjff2lA8zadYBpkycmXmmm85PkV1A/exec';
   const form = document.getElementById('titleForm');
   const submitBtn = document.getElementById('submitBtn');
+
+  const setPressed = (el, pressed) => el.setAttribute('aria-pressed', pressed ? 'true' : 'false');
 
   function updateHiddenFromGroup(group){
     const name = group.dataset.name;
@@ -317,8 +679,6 @@
     const hidden = form.querySelector(`input[name="${name}"]`);
     if (hidden) hidden.value = multi ? active.join(', ') : (active[0] || '');
   }
-
-  // 선택된 상태에 맞춰 타일 아이콘 src 교체
   function updateTileIcon(tile){
     const img = tile.querySelector('img[data-src][data-active]');
     if (!img) return;
@@ -326,70 +686,97 @@
     if (img.src !== next) img.src = next;
   }
 
-  // 이벤트 바인딩 (단 한 번만)
+  /** =========================
+   *  선택 로직 + 접근성 + 배타 칩
+   *  ========================= */
   function initSelectable(){
     document.querySelectorAll('.group[data-name]').forEach(group => {
+      group.querySelectorAll('.tile, .chip').forEach(el => setPressed(el, el.classList.contains('active')));
       group.addEventListener('click', (e)=>{
         const el = e.target.closest('.tile, .chip');
-        if (!el) return;
-        if (el.hasAttribute('disabled') || el.classList.contains('disabled')) return;
+        if (!el || el.hasAttribute('disabled') || el.classList.contains('disabled')) return;
+
         const multi = group.dataset.multi === 'true';
         if (multi) {
           el.classList.toggle('active');
+          setPressed(el, el.classList.contains('active'));
           if (el.classList.contains('tile')) updateTileIcon(el);
         } else {
           group.querySelectorAll('.tile.active, .chip.active').forEach(n => {
-            n.classList.remove('active');
-            if (n.classList.contains('tile')) updateTileIcon(n);
+            n.classList.remove('active'); setPressed(n, false); if (n.classList.contains('tile')) updateTileIcon(n);
           });
-          el.classList.add('active');
-          if (el.classList.contains('tile')) updateTileIcon(el);
+          el.classList.add('active'); setPressed(el, true); if (el.classList.contains('tile')) updateTileIcon(el);
         }
-	// '없음 (올인원 신청)'은 배타 선택 처리
-      if (group.dataset.name === 'resources') {
-        const isExclusive = el.dataset.exclusive === 'true';
-        const noneChip = group.querySelector('.chip[data-exclusive="true"]');
 
-        if (isExclusive) {
-          // '없음'을 눌렀다면 다른 칩 비활성화
-          group.querySelectorAll('.chip.active').forEach(n => {
-            if (n !== el) n.classList.remove('active');
-          });
-        } else if (noneChip && noneChip.classList.contains('active')) {
-          // 다른 칩을 고르면 '없음' 비활성화
-          noneChip.classList.remove('active');
+        if (group.dataset.name === 'resources') {
+          const isExclusive = el.dataset.exclusive === 'true';
+          const noneChip = group.querySelector('.chip[data-exclusive="true"]');
+          if (isExclusive) {
+            group.querySelectorAll('.chip.active').forEach(n => { if (n !== el) { n.classList.remove('active'); setPressed(n, false); }});
+          } else if (noneChip && noneChip.classList.contains('active')) {
+            noneChip.classList.remove('active'); setPressed(noneChip, false);
+          }
         }
-      }
-      /* ======================= */
-
         updateHiddenFromGroup(group);
       });
     });
+    document.querySelectorAll('.tile').forEach(updateTileIcon);
+  }
+  initSelectable();
 
-   // 초기 아이콘 상태 정리
-document.querySelectorAll('.tile').forEach(updateTileIcon);
-}
-initSelectable();
+  // 아이콘 프리로드
+  ;(function preloadActiveIcons(){
+    const urls = Array.from(document.querySelectorAll('.tile img[data-active]'))
+      .map(img => img.dataset.active)
+      .filter(Boolean);
+    urls.forEach(src => { const i = new Image(); i.src = src; });
+  })();
 
-// ↓ 하드코딩 프리로드는 제거(중복 방지)
-// ['brand_w.svg','product_w.svg' /* ... */].forEach(src => {
-//   const i = new Image();
-//   i.src = 'https://raw.githubusercontent.com/XRConnect/XR-Connect---Assets/main/' + src;
-// });
+  /** =========================
+   *  섹션5: 이메일/연락처 유효성 (리스너는 제출 바깥!)
+   *  ========================= */
+  const emailEl = document.getElementById('email');
+  const phoneEl = document.getElementById('phone');
 
-// 자동 프리로드(IIFE) - 세미콜론으로 안전하게 시작
-;(function preloadActiveIcons(){
-  const urls = Array.from(document.querySelectorAll('.tile img[data-active]'))
-    .map(img => img.dataset.active)
-    .filter(Boolean);
-  urls.forEach(src => { const i = new Image(); i.src = src; });
-})();
+  if (emailEl) {
+    const setEmailValidity = () => {
+      emailEl.setCustomValidity('');
+      if (emailEl.value.trim() === '') return;
+      if (!emailEl.checkValidity()) emailEl.setCustomValidity('올바른 이메일 주소를 입력해 주세요.');
+    };
+    emailEl.addEventListener('input', setEmailValidity);
+    emailEl.addEventListener('invalid', setEmailValidity);
+    emailEl.addEventListener('blur', setEmailValidity);
+  }
 
+  if (phoneEl) {
+    const formatPhone = (digits) => {
+      if (digits.length <= 3) return digits;
+      if (digits.length <= 7) return `${digits.slice(0,3)}-${digits.slice(3)}`;
+      return `${digits.slice(0,3)}-${digits.slice(3,7)}-${digits.slice(7,11)}`;
+    };
+    const setPhoneValidityAndFormat = () => {
+      let digits = phoneEl.value.replace(/\D/g, '');
+      phoneEl.value = formatPhone(digits);
+      phoneEl.setCustomValidity('');
+      if (digits.length === 0) return;
+      if (!digits.startsWith('010')) phoneEl.setCustomValidity('연락처는 010으로 시작해야 합니다.');
+      else if (digits.length < 11) phoneEl.setCustomValidity('연락처는 숫자 11자리(010 포함) 이상이어야 합니다.');
+    };
+    phoneEl.addEventListener('input', setPhoneValidityAndFormat);
+    phoneEl.addEventListener('blur', setPhoneValidityAndFormat);
+    phoneEl.addEventListener('invalid', setPhoneValidityAndFormat);
+  }
 
-  // 제출
+  /** =========================
+   *  제출
+   *  ========================= */
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!form.reportValidity()) return;
+
+    if (submitBtn.disabled) return;
+    form.classList.add('was-validated');           // 제출 시도 → 에러 스타일 표시
+    if (!form.reportValidity()) return;            // ✅ 한 번만 호출
 
     document.querySelectorAll('.group[data-name]').forEach(updateHiddenFromGroup);
 
@@ -402,39 +789,29 @@ initSelectable();
         const msg = (data && data.error) ? data.error : 'Network or server error';
         throw new Error(msg);
       }
-      alert('등록되었습니다. 감사합니다!');
-      form.reset();
-      document.querySelectorAll('.tile.active, .chip.active').forEach(n => { n.classList.remove('active');
-      if (n.classList.contains('tile')) updateTileIcon(n);
-      });
-     // 제출 try 블록의 reset 이후에 추가
-     if (endDate) endDate.min = '';
-    // 히든 값도 초기화
-     document.querySelectorAll('.group[data-name]').forEach(updateHiddenFromGroup);
-     } catch (err) { console.error(err);
-      alert('전송 실패: ' + err.message);
-     } finally {
-       submitBtn.disabled = false;
-     }
-   });
-  // === 일정 ===
-  const startDate = document.getElementById('startDate');
-  const endDate   = document.getElementById('endDate');
- if (startDate && endDate){
-  startDate.addEventListener('change', ()=>{
-    endDate.min = startDate.value || '';
-    if (endDate.value && startDate.value && endDate.value < startDate.value) {
-      endDate.value = startDate.value; // 자동 보정
-    }
-  });
-  endDate.addEventListener('change', ()=>{
-    if (startDate.value && endDate.value < startDate.value) {
-      endDate.value = startDate.value;
-    }
-  });
-}
-  // =======================
 
-</script>
+      alert('문의가 등록되었습니다✅. 감사합니다🙇‍♂️');
+
+      // 상태/값 리셋
+      form.classList.remove('was-validated');
+      document.querySelectorAll('.input').forEach(el => el.classList.remove('user-touched'));
+
+      form.reset();
+      document.querySelectorAll('.tile.active, .chip.active').forEach(n => {
+        n.classList.remove('active'); setPressed(n, false);
+        if (n.classList.contains('tile')) updateTileIcon(n);
+      });
+      if (fpStart) fpStart.clear();
+      if (fpEnd) { fpEnd.clear(); fpEnd.set('minDate', null); }
+      document.querySelectorAll('.group[data-name]').forEach(updateHiddenFromGroup);
+
+    } catch (err) {
+      console.error(err);
+      alert('전송 실패: ' + err.message);
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+});</script>
 </body>
 </html>
