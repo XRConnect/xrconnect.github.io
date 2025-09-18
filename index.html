@@ -76,7 +76,7 @@
   /* 섹션4 레이아웃 */
   .field-stack{ display:flex; flex-direction:column; }
   .row-2col{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); column-gap:16px; row-gap:16px; }
-  .group{ margin-bottom:56px; }
+  .group{ margin-bottom:40px; }
   .group h3{ font-size:16px; font-weight:700; margin-top:0 !important; }
   .textarea{
     width:100%; min-height:120px; padding:16px; border:1px solid var(--border); border-radius:16px; font-family:Inter, sans-serif; font-size:14px;
@@ -183,13 +183,15 @@
   .cta:disabled{ opacity:.6; cursor:not-allowed; }
 
   /* 반응형 */
-  @media (max-width:1000px){ .wrap{ grid-template-columns:1fr; gap:24px; } .left{ width:auto; } }
-  @media (max-width:800px){ .row-2col{ grid-template-columns:1fr; } }
-  @media (max-width:640px){
+  @media (max-width:1279px){ .wrap{ grid-template-columns:1fr; gap:24px; } .left{ width:auto; } }
+  @media (max-width:1279px){ .row-2col{ grid-template-columns:1fr; } }
+  @media (max-width:799px){
     .tiles{ grid-template-columns:repeat(2, minmax(0,1fr)); }
     .group[data-name="purpose"] .tiles{ grid-template-columns:1fr!important; }
     .cs-panel{ max-height:320px; }
+    .section{ padding:56px 20px;}
   }
+ 
 </style>
 
 
